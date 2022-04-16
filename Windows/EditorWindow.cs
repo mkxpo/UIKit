@@ -274,6 +274,7 @@ namespace Core.Windows {
                 control.MaxLength = maxLength;
                 if (maxLength > 255) {
                     control.Multiline = true;
+                    control.AcceptsReturn = true;
                     control.ScrollBars = ScrollBars.Vertical;
                     control.Height = (int)(80 * this.DeviceDpi / 96.0);
                 }
