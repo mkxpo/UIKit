@@ -250,6 +250,8 @@ namespace Core.Windows {
         protected virtual Control CreateGroupLabel(string groupTitle) {
             var control = new Label();
             control.TextAlign = ContentAlignment.MiddleLeft;
+            control.AutoSize = false;
+            control.Height = (int)(24 * this.DeviceDpi / 96.0);
             control.Text = groupTitle;
             control.Font = new Font(control.Font, FontStyle.Bold);
             return control;
@@ -257,7 +259,9 @@ namespace Core.Windows {
 
         protected virtual Control CreateLabel(PropertyInfo property) {
             var control = new Label();
-            control.TextAlign = ContentAlignment.MiddleLeft;            
+            control.TextAlign = ContentAlignment.MiddleLeft;
+            control.AutoSize = false;
+            control.Height = (int)(24 * this.DeviceDpi / 96.0);
             control.Text = ReflectionHelper.GetPropertyName(property);
             if (ReflectionHelper.IsPropertyRequired(property)) {
                 control.Text += "*";
