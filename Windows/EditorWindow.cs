@@ -517,6 +517,7 @@ namespace Core.Windows {
         }
 
         protected virtual void OnBusinessObjectChanged(string propertyName) {
+            BusinessObject.OnPropertyChanged(dbContext, propertyName);
         }
 
         protected virtual List<DataObjectBase> GetCollectionFromDbContext(Type entityType) {
