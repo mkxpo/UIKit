@@ -25,6 +25,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Controls\FileEditUserControl.cs">
+	    <SubType>UserControl</SubType>
+	  </Compile>
 	  <Compile Update="Properties\Resources.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
