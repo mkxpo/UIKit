@@ -425,6 +425,7 @@ namespace Core.Windows {
             control.AllowAdd = control.AllowDelete = LiftToTrue(SecurityHelper.IsEditAllowed(property));
             control.AllowEdit = true;
             control.SelectButtonVisible = false;
+            control.Toolbar.BackColor = SystemColors.ControlLightLight;
             return control;
         }
 
