@@ -154,7 +154,7 @@ namespace Core.Controls {
                     Columns.Add(col);
                 }
             }
-            if (Columns.Count <= 4) {
+            if (Columns.Count <= 4 || true) {
                 foreach (DataGridViewColumn col in Columns) {
                     col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 }
@@ -201,6 +201,7 @@ namespace Core.Controls {
             if (col == null) {
                 col = new DataGridViewTextBoxColumn();
                 col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
+                col.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             }
             col.HeaderText = ReflectionHelper.GetPropertyName(property);
             col.DataPropertyName = property.Name;
