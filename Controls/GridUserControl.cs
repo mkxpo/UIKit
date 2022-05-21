@@ -121,9 +121,11 @@ namespace Core.Controls {
         }
 
         public void SetupSecurity(Type itemType) {
+            bool itemAllowEdit = LiftToTrue(SecurityHelper.IsCreateAllowed(itemType));
             AllowAdd = LiftToTrue(SecurityHelper.IsCreateAllowed(itemType));
             AllowEdit = true;
             AllowDelete = LiftToTrue(SecurityHelper.IsDeleteAllowed(itemType));
+            EditButtonText = (itemAllowEdit) ? "Редактировать" : "Открыть";
             ToolbarVisibility = AllowEdit || AllowFind || allowDelete || AllowAdd;
         }
 

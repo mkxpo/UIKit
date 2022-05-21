@@ -197,8 +197,13 @@ namespace Core.Windows {
                 if (IsNewItem) {
                     return string.Format("{0} - [новая запись]", GetBusinessObjectName());
                 } else {
-                    return string.Format("{0} - [редактирование]", GetBusinessObjectName());
-                }
+                    if (btnOk.Enabled) {
+                        return string.Format("{0} - [редактирование]", GetBusinessObjectName());
+                    }
+                    else {
+                        return string.Format("{0} - [просмотр]", GetBusinessObjectName());
+                    }
+                }            
             } else {
                 return ReflectionHelper.GetTypeName(BusinessObject);
             }
