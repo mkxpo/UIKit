@@ -15,7 +15,7 @@ namespace Core {
     /// Вспомогательный класс для работы с данными о типах времени исполнения.
     /// Используется для получение списков редактируемых свойств объектов и их атрибутов.
     /// </summary>
-    static class ReflectionHelper {
+    public static class ReflectionHelper {
 
         static readonly ConcurrentDictionary<Type, PropertyInfo[]> propertyCache = new ConcurrentDictionary<Type, PropertyInfo[]>();
         static readonly ConcurrentDictionary<Type, Attribute[]> typeAttributeCache = new ConcurrentDictionary<Type, Attribute[]>();
