@@ -90,10 +90,9 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button btnOk;
-        private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Panel buttonsPanel;
         private System.Windows.Forms.Panel contentPanel;
+        protected System.Windows.Forms.Button btnOk;
+        protected System.Windows.Forms.Button btnCancel;
     }
 }
