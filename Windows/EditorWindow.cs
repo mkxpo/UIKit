@@ -410,7 +410,7 @@ namespace Core.Windows {
             GridUserControl control = new GridUserControl();
             control.AutoCreateColumns(gridItemType);
             control.SetupSecurity(gridItemType);
-            SetupBinding(control, nameof(GridUserControl.ItemsSource), property);
+            control.ApplyDefaultSort(gridItemType);
             control.MinimumSize = new Size(0, (int)(80 * this.DeviceDpi / 96.0));
             control.DataRefresh += ((sender, args) => {
                 GridDataRefresh(control, property, gridItemType);
@@ -431,6 +431,7 @@ namespace Core.Windows {
             control.AllowEdit = true;
             control.SelectButtonVisible = false;
             control.Toolbar.BackColor = SystemColors.ControlLightLight;
+            GridDataRefresh(control, property, gridItemType);
             return control;
         }
 
