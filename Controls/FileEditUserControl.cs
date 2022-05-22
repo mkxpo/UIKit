@@ -77,10 +77,7 @@ namespace Core.Controls {
             if (data == null || data.Length < 256) {
                 return null;
             }
-            using (MemoryStream stream = new MemoryStream(data))
-            {
-                return System.Text.Encoding.UTF8.GetString(data, 0, 256);
-            }
+            return System.Text.Encoding.UTF8.GetString(data, 0, 256);
         }
 
         byte[] CreateBlob(byte[] fileData, string fileName) {
