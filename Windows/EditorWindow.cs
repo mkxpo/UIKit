@@ -47,17 +47,18 @@ namespace Core.Windows {
             }
         }
 
-        protected virtual void SetupSecurity() {
+        protected virtual void SetupSecurity()
+        {
             bool? tmp = SecurityHelper.IsEditOrCreateAllowed(BusinessObject.GetType());
             bool isEditAllowed = LiftToTrue(tmp);
-            if (tmp == null) {
-                PropertyInfo[] props = ReflectionHelper.GetVisibleProperties(BusinessObject);
-                foreach (var prop in props) {
-                    tmp = SecurityHelper.IsEditAllowed(prop);
-                    if (LiftToTrue(tmp)) {
-                        isEditAllowed = true;
-                        break;
-                    }
+            PropertyInfo[] props = ReflectionHelper.GetVisibleProperties(BusinessObject);
+            foreach (var prop in props)
+            {
+                tmp = SecurityHelper.IsEditAllowed(prop);
+                if (LiftToTrue(tmp))
+                {
+                    isEditAllowed = true;
+                    break;
                 }
             }
             btnOk.Enabled = isEditAllowed;
