@@ -35,7 +35,7 @@ namespace Core.Windows {
             SetupSecurity();
             Text = GetWindowTitle();
             Height = MinimumSize.Height;
-        }        
+        }
 
         public EditorWindow() {
             InitializeComponent();
@@ -43,20 +43,17 @@ namespace Core.Windows {
 
         int NonClientHeight {
             get {
-                return Height - ClientSize.Height + (int)(16 * this.DeviceDpi / 96.0);
+                return Height - ClientSize.Height + ScaleByDpi(16);
             }
         }
 
-        protected virtual void SetupSecurity()
-        {
+        protected virtual void SetupSecurity() {
             bool? tmp = SecurityHelper.IsEditOrCreateAllowed(BusinessObject.GetType());
             bool isEditAllowed = LiftToTrue(tmp);
             PropertyInfo[] props = ReflectionHelper.GetVisibleProperties(BusinessObject);
-            foreach (var prop in props)
-            {
+            foreach (var prop in props) {
                 tmp = SecurityHelper.IsEditAllowed(prop);
-                if (LiftToTrue(tmp))
-                {
+                if (LiftToTrue(tmp)) {
                     isEditAllowed = true;
                     break;
                 }
@@ -80,7 +77,7 @@ namespace Core.Windows {
                 TableLayoutPanel grid = CreateControls(props);
                 contentPanel.Controls.Add(grid);
                 grid.Dock = DockStyle.Fill;
-                MinimumSize = new Size(MinWidth, grid.MinimumSize.Height + buttonsPanel.Height + NonClientHeight + contentPanel.Padding.All * 2);                
+                MinimumSize = new Size(MinWidth, grid.MinimumSize.Height + buttonsPanel.Height + NonClientHeight + contentPanel.Padding.All * 2);
             } else {
                 int maxGridHeight = 0;
                 TabControl tabControl = new TabControl();
@@ -89,7 +86,7 @@ namespace Core.Windows {
                     tabItem.Text = tabTitle;
                     PropertyInfo[] propsForTab = props.Where(t => ReflectionHelper.GetPropertyTabTitle(t) == tabTitle).ToArray();
                     TableLayoutPanel grid = CreateControls(propsForTab);
-                    grid.Padding = new Padding((int)(8 * this.DeviceDpi / 96.0));
+                    grid.Padding = new Padding(ScaleByDpi(8));
                     tabItem.Controls.Add(grid);
                     grid.Dock = DockStyle.Fill;
                     tabControl.TabPages.Add(tabItem);
@@ -105,7 +102,7 @@ namespace Core.Windows {
             TableLayoutPanel grid = new TableLayoutPanel();
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, (int)(24 * this.DeviceDpi / 96.0)));
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, ScaleByDpi(24)));
 
             List<Control> controls = new List<Control>();
             List<Control> labels = new List<Control>();
@@ -132,7 +129,7 @@ namespace Core.Windows {
                         controls.Add(control);
                         control.Dock = DockStyle.Fill;
                         Control label = CreateLabel(property);
-                        label.Dock = DockStyle.Top;                        
+                        label.Dock = DockStyle.Top;
                         labels.Add(label);
                     } else {
                         Control tabItem = CreateTabItem(property);
@@ -182,8 +179,8 @@ namespace Core.Windows {
                 grid.ColumnStyles[0].Width = labels.Max(t => GetLabelWidth(t) * 11 / 10);
             }
 
-            int totalControlsHeight = controls.Sum(t => (t != null ? t.Height : (int)(24 * this.DeviceDpi / 96.0)) + (int)(ControlSpacing * this.DeviceDpi / 96.0));
-            grid.MinimumSize = new Size(0, totalControlsHeight + ((tabItems.Count > 0) ? (int)(DefaultGridHeight * this.DeviceDpi / 96.0) : 0));
+            int totalControlsHeight = controls.Sum(t => (t != null ? t.Height : ScaleByDpi(24)) + ScaleByDpi(ControlSpacing));
+            grid.MinimumSize = new Size(0, totalControlsHeight + ((tabItems.Count > 0) ? ScaleByDpi(DefaultGridHeight) : 0));
             return grid;
         }
 
@@ -200,11 +197,10 @@ namespace Core.Windows {
                 } else {
                     if (btnOk.Enabled) {
                         return string.Format("{0} - [редактирование]", GetBusinessObjectName());
-                    }
-                    else {
+                    } else {
                         return string.Format("{0} - [просмотр]", GetBusinessObjectName());
                     }
-                }            
+                }
             } else {
                 return ReflectionHelper.GetTypeName(BusinessObject);
             }
@@ -243,7 +239,7 @@ namespace Core.Windows {
                 }
             }
             throw new NotSupportedException();
-        }        
+        }
 
         protected bool IsPlaceOnSeparateTab(PropertyInfo property) {
             Type type = property.PropertyType;
@@ -257,7 +253,7 @@ namespace Core.Windows {
             var control = new Label();
             control.TextAlign = ContentAlignment.MiddleLeft;
             control.AutoSize = false;
-            control.Height = (int)(24 * this.DeviceDpi / 96.0);
+            control.Height = ScaleByDpi(24);
             control.Text = groupTitle;
             control.Font = new Font(control.Font, FontStyle.Bold);
             return control;
@@ -267,7 +263,7 @@ namespace Core.Windows {
             var control = new Label();
             control.TextAlign = ContentAlignment.MiddleLeft;
             control.AutoSize = false;
-            control.Height = (int)(24 * this.DeviceDpi / 96.0);
+            control.Height = ScaleByDpi(24);
             control.Text = ReflectionHelper.GetPropertyName(property);
             if (ReflectionHelper.IsPropertyRequired(property)) {
                 control.Text += "*";
@@ -286,7 +282,7 @@ namespace Core.Windows {
                     control.Multiline = true;
                     control.AcceptsReturn = true;
                     control.ScrollBars = ScrollBars.Vertical;
-                    control.Height = (int)(80 * this.DeviceDpi / 96.0);
+                    control.Height = ScaleByDpi(80);
                 }
             }
             control.ReadOnly = isReadOnly;
@@ -374,7 +370,7 @@ namespace Core.Windows {
                 if (string.IsNullOrEmpty(format) || !format.Contains("HH")) {
                     DateControl control = new DateControl();
                     control.ReadOnly = ReflectionHelper.IsPropertyReadonly(property);
-                    control.MaximumSize = new Size((int)(250 * this.DeviceDpi / 96.0), control.MaximumSize.Height);
+                    control.MaximumSize = new Size(ScaleByDpi(250), control.MaximumSize.Height);
                     Binding binding = SetupBinding(control, nameof(DateControl.Value), property);
                     binding.NullValue = DateTime.MinValue;
                     return control;
@@ -384,7 +380,7 @@ namespace Core.Windows {
             } else {
                 DateTimePicker control = new DateTimePicker();
                 control.Enabled = !ReflectionHelper.IsPropertyReadonly(property);
-                control.MaximumSize = new Size((int)(250 * this.DeviceDpi / 96.0), control.MaximumSize.Height);
+                control.MaximumSize = new Size(ScaleByDpi(250), control.MaximumSize.Height);
                 Binding binding = SetupBinding(control, nameof(DateTimePicker.Value), property);
                 binding.NullValue = DateTime.MinValue;
                 control.Format = DateTimePickerFormat.Custom;
@@ -412,7 +408,7 @@ namespace Core.Windows {
             control.AutoCreateColumns(gridItemType);
             control.SetupSecurity(gridItemType);
             control.ApplyDefaultSort(gridItemType);
-            control.MinimumSize = new Size(0, (int)(80 * this.DeviceDpi / 96.0));
+            control.MinimumSize = new Size(0, ScaleByDpi(80));
             control.DataRefresh += ((sender, args) => {
                 GridDataRefresh(control, property, gridItemType);
             });
@@ -421,8 +417,8 @@ namespace Core.Windows {
             });
             control.EditClick += ((sender, args) => {
                 GridItemEdit(control, property, gridItemType);
-            });            
-            control.RowDoubleClick+= ((sender, args) => {
+            });
+            control.RowDoubleClick += ((sender, args) => {
                 GridItemEdit(control, property, gridItemType);
             });
             control.DeleteClick += ((sender, args) => {
@@ -500,7 +496,7 @@ namespace Core.Windows {
 
         protected virtual Control CreateTabControl() {
             TabControl control = new TabControl();
-            control.Margin = new Padding(0, (int)(16 * this.DeviceDpi / 96.0), 0, 0);
+            control.Margin = new Padding(0, ScaleByDpi(16), 0, 0);
             return control;
         }
 
@@ -520,7 +516,7 @@ namespace Core.Windows {
                 binding = control.DataBindings.Add(controlProperty, BusinessObject, modelProperty.Name, true, DataSourceUpdateMode.OnPropertyChanged);
             } else {
                 binding = control.DataBindings.Add(controlProperty, BusinessObject, modelProperty.Name, true, DataSourceUpdateMode.OnPropertyChanged, null, format);
-            }            
+            }
             return binding;
         }
 
@@ -534,6 +530,30 @@ namespace Core.Windows {
 
         protected virtual List<DataObjectBase> GetCollectionFromDbContext(Type entityType) {
             return EFHelper.GetObjectCollection(dbContext, entityType);
+        }
+
+        Button lastActionButton = null;
+
+        protected Control AddActionButton(string text, Action action) {
+            Button btn = new Button();
+            buttonsPanel.Controls.Add(btn);
+            if (lastActionButton != null) {
+                btn.Left += lastActionButton.Right + ScaleByDpi(16);
+            } else {
+                btn.Left += ScaleByDpi(16);
+            }
+            btn.Visible = true;
+            btn.Height = btnOk.Height;
+            btn.Width = btnOk.Width;
+            btn.Top = btnOk.Top;
+            btn.Text = text;
+            btn.Click += (sender, args) => action();
+            lastActionButton = btn;
+            return btn;
+        }
+
+        protected int ScaleByDpi(int value) {
+            return (int)(value * this.DeviceDpi / 96.0);
         }
     }
 }

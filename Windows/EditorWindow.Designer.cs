@@ -35,9 +35,10 @@
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOk.CausesValidation = false;
             this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOk.Location = new System.Drawing.Point(635, 9);
+            this.btnOk.Location = new System.Drawing.Point(741, 10);
+            this.btnOk.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(75, 23);
+            this.btnOk.Size = new System.Drawing.Size(88, 27);
             this.btnOk.TabIndex = 0;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
@@ -47,9 +48,10 @@
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.CausesValidation = false;
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(713, 9);
+            this.btnCancel.Location = new System.Drawing.Point(832, 10);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.Size = new System.Drawing.Size(88, 27);
             this.btnCancel.TabIndex = 1;
             this.btnCancel.Text = "Отмена";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -59,29 +61,32 @@
             this.buttonsPanel.Controls.Add(this.btnCancel);
             this.buttonsPanel.Controls.Add(this.btnOk);
             this.buttonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonsPanel.Location = new System.Drawing.Point(0, 406);
+            this.buttonsPanel.Location = new System.Drawing.Point(0, 468);
+            this.buttonsPanel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.buttonsPanel.Name = "buttonsPanel";
-            this.buttonsPanel.Size = new System.Drawing.Size(800, 44);
+            this.buttonsPanel.Size = new System.Drawing.Size(933, 51);
             this.buttonsPanel.TabIndex = 2;
             // 
             // contentPanel
             // 
             this.contentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.contentPanel.Location = new System.Drawing.Point(0, 0);
+            this.contentPanel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.contentPanel.Name = "contentPanel";
-            this.contentPanel.Padding = new System.Windows.Forms.Padding(8);
-            this.contentPanel.Size = new System.Drawing.Size(800, 406);
+            this.contentPanel.Padding = new System.Windows.Forms.Padding(9, 9, 9, 9);
+            this.contentPanel.Size = new System.Drawing.Size(933, 468);
             this.contentPanel.TabIndex = 3;
             // 
             // EditorWindow
             // 
             this.AcceptButton = this.btnOk;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(933, 519);
             this.Controls.Add(this.contentPanel);
             this.Controls.Add(this.buttonsPanel);
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "EditorWindow";
             this.Text = "EditorWindow";
             this.buttonsPanel.ResumeLayout(false);
@@ -90,9 +95,9 @@
         }
 
         #endregion
-        private System.Windows.Forms.Panel buttonsPanel;
         private System.Windows.Forms.Panel contentPanel;
         protected System.Windows.Forms.Button btnOk;
         protected System.Windows.Forms.Button btnCancel;
+        protected System.Windows.Forms.Panel buttonsPanel;
     }
 }
