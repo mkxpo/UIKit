@@ -260,5 +260,29 @@ namespace Core {
             }
             return formatter(propertyValue);
         }
+
+        public static string GetDefaultStringRepresentation(object obj) {
+            if (obj == null) {
+                return "(нет)";
+            }
+            PropertyInfo nameProperty = GetDefaultProperty(obj.GetType());
+            if (nameProperty != null) {
+                return nameProperty.GetValue(obj)?.ToString();
+            } else {
+                PropertyInfo keyProperty = GetKeyProperty(obj.GetType());
+                string keyValue;
+                string typeName = GetTypeName(obj);
+                if (keyProperty != null) {
+                    keyValue = FormatPropertyValue(keyProperty, keyProperty.GetValue(obj));
+                } else {
+                    keyValue = "";
+                }
+                return $"{typeName} {keyValue}";
+            }
+        }
+
+        public static PropertyInfo GetDefaultProperty(Type type) {
+            return type.GetProperty("Name", BindingFlags.Instance | BindingFlags.Public);
+        }
     }
 }

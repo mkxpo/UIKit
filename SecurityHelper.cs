@@ -10,7 +10,7 @@ namespace Core {
     /// <summary>
     /// Вспомогательный класс для определения правил разграничения доступа к объектам, задаваемым с помощью атрибутов.
     /// </summary>
-    static class SecurityHelper {
+    public static class SecurityHelper {
 
         public static bool? IsReadAllowed(Type type) {
             var attr = ReflectionHelper.GetAttribute<AllowReadAttribute>(type);

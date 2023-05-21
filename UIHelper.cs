@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Core.Windows;
+using System.Drawing;
 
 namespace Core {
 
@@ -14,12 +15,12 @@ namespace Core {
     /// </summary>
     public static class UIHelper {
 
-        public static TModel CreateObject<TModel>(Form ownerWindow, DbContext dbContext = null)
+        public static TModel CreateObject<TModel>(Control ownerWindow, DbContext dbContext = null)
             where TModel : DataObjectBase {
             return (TModel)CreateObject(typeof(TModel), ownerWindow, dbContext, true);
         }
 
-        public static DataObjectBase CreateObject(Type dataObjectType, Form ownerWindow, DbContext dbContext = null, bool autoSave = false, Func<object, bool> afterObjectCreated = null) {
+        public static DataObjectBase CreateObject(Type dataObjectType, Control ownerWindow, DbContext dbContext = null, bool autoSave = false, Func<object, bool> afterObjectCreated = null) {
             Cursor.Current = Cursors.WaitCursor;
             DbContext dataContext = (dbContext != null) ? dbContext : ServiceProvider.DataContextFactory.CreateDbContext();
             try {
@@ -96,7 +97,7 @@ namespace Core {
             }
         }
 
-        public static DataObjectBase EditObject(DataObjectBase model, Form ownerWindow = null, DbContext dbContext = null, bool autoSave = false) {
+        public static DataObjectBase EditObject(DataObjectBase model, Control ownerWindow = null, DbContext dbContext = null, bool autoSave = false) {
             Cursor.Current = Cursors.WaitCursor;
             DbContext dataContext = null;
             try {
@@ -188,6 +189,15 @@ namespace Core {
             }
         }
 
+        public static CollectionEditorControl CreateEditCollectionControl(Type collectionItemType) {
+            DbContext dataContext = ServiceProvider.DataContextFactory.CreateDbContext();
+            var control = new CollectionEditorControl(collectionItemType, dataContext, false);
+            control.Disposed += (s, e) => {
+                dataContext.Dispose();
+            };
+            return control;
+        }
+
         public static bool DeleteObject(DataObjectBase model) {
             DbContext dataContext = ServiceProvider.DataContextFactory.CreateDbContext();
             try {
@@ -251,37 +261,39 @@ namespace Core {
             }
         }
 
-        public static void Info(this Form window, string title, string text, params object[] parameters) {
+        public static void Info(this Control window, string title, string text, params object[] parameters) {
             text = string.Format(text, parameters);
             MessageBox.Show(text, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        public static void Warning(this Form window, string text, params object[] parameters) {
+        public static void Warning(this Control window, string text, params object[] parameters) {
             text = string.Format(text, parameters);
             MessageBox.Show(text, "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
-        public static void Error(this Form window, Exception ex) {
+        public static void Error(this Control window, Exception ex) {
             while (ex.InnerException != null) {
                 ex = ex.InnerException;
             }
             Error(window, "{0}", string.Join("\r\n", ex.Message));
         }
 
-        public static void Error(this Form window, string text, params object[] parameters) {
+        public static void Error(this Control window, string text, params object[] parameters) {
             text = string.Format(text, parameters);
             MessageBox.Show(text, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        public static bool Confirm(this Form window, string text, params object[] parameters) {
+        public static bool Confirm(this Control window, string text, params object[] parameters) {
             text = string.Format(text, parameters);
             return (MessageBox.Show(text, "Подтверждение операции", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes);
         }
 
-        static void ArrangeToParentWindow(Form window, Form parent) {
-            if (parent != null) {
-                window.Left = parent.Left + 32;
+        static void ArrangeToParentWindow(Form window, Control parent) {
+            if (parent is Form parentWindow) {
+                window.Left = parentWindow.Left + 32;
                 window.Top = parent.Top + 32;
+            } else {
+                window.StartPosition = FormStartPosition.CenterScreen;
             }
         }
 

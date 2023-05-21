@@ -25,9 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Controls\FileEditUserControl.cs">
-	    <SubType>UserControl</SubType>
-	  </Compile>
+	  <Compile Update="Controls\FileEditUserControl.cs" />
 	  <Compile Update="Properties\Resources.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
@@ -38,6 +36,7 @@
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>Settings.settings</DependentUpon>
 	  </Compile>
+	  <Compile Update="Windows\CollectionEditorControl.cs" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -30,7 +30,7 @@ namespace Core {
         }
 
         [NotMapped]
-        public string StringRepresentation {
+        public virtual string StringRepresentation {
             get {
                 return ToString();
             }
@@ -125,6 +125,10 @@ namespace Core {
 
         public override int GetHashCode() {
             return ReflectionHelper.GetObjectID(this);
+        }
+
+        public override string ToString() {
+            return ReflectionHelper.GetDefaultStringRepresentation(this);
         }
     }
 }

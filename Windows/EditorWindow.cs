@@ -465,7 +465,23 @@ namespace Core.Windows {
             }
         }
 
+        void FixRelationToParentObject(object childObject, PropertyInfo parentObjectCollectionProperty) {
+            if (BusinessObject == null || childObject == null) { 
+                return; 
+            }
+            var parentEntityType = dbContext.Model.FindRuntimeEntityType(BusinessObject.GetType());
+            foreach (var navigation in parentEntityType.GetNavigations()) {
+                if (navigation.IsCollection) {
+                    if (navigation.PropertyInfo.Name == parentObjectCollectionProperty.Name) {
+                        navigation.Inverse.PropertyInfo.SetValue(childObject, BusinessObject);
+                        break;
+                    }
+                }
+            }
+        }
+
         protected virtual bool GridAfterNewItemInitialized(PropertyInfo collectionProperty, object createdItem) {
+            FixRelationToParentObject(createdItem, collectionProperty);
             return true;
         }
 
