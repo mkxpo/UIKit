@@ -89,6 +89,7 @@ namespace Core.Controls {
                         CurrentCell = SelectedRows[0].Cells[oldColumnIndex];
                     }
                 }
+                SetupColumnsAutoSize();
             }
         }
         
@@ -154,11 +155,6 @@ namespace Core.Controls {
                     Columns.Add(col);
                 }
             }
-            if (Columns.Count <= 4 || true) {
-                foreach (DataGridViewColumn col in Columns) {
-                    col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                }
-            }
         }
 
         protected virtual DataGridViewColumn CreateColumn(PropertyInfo property) {
@@ -206,19 +202,59 @@ namespace Core.Controls {
             col.HeaderText = ReflectionHelper.GetPropertyName(property);
             col.DataPropertyName = property.Name;
             col.Name = col.DataPropertyName;
-            col.MinimumWidth = (int)(64 * this.DeviceDpi / 96.0);
             return col;
         }
 
         public void ApplyDefaultSort(Type itemType) {
             PropertyInfo[] properties = ReflectionHelper.GetVisibleProperties(itemType);
+            bool sortApplied = false;
             foreach (var prop in properties) {
                 SortDirectionAttribute sortAttr = ReflectionHelper.GetSortDirection(prop);
                 if (sortAttr != null) {
                     ApplySort(prop.Name, sortAttr.Direction);
+                    sortApplied = true;
                     break;
                 }
             }
+            if (!sortApplied) {
+                PropertyInfo defaultProperty = ReflectionHelper.GetDefaultProperty(itemType);
+                if (defaultProperty != null && properties.Contains(defaultProperty)) {
+                    ApplySort(defaultProperty.Name, ListSortDirection.Ascending);
+                }
+            }
+        }
+        bool columnWidthInitialized = false;
+        void SetupColumnsAutoSize() {
+            if (Rows.Count < 1 || Columns.Count < 1) {
+                return;
+            }
+            if(columnWidthInitialized) {
+                return;
+            }
+            int[] colSizes = new int[Columns.Count];
+            for (int c = 0; c < Columns.Count; c++) {
+                int[] rowSizes = new int[Rows.Count];
+                for (int r = 0; r < Rows.Count; r++) {
+                    string text = Rows[r].Cells[c].FormattedValue?.ToString();
+                    rowSizes[r] = text != null ? text.Length : 0;
+                }
+                Array.Sort(rowSizes);
+                colSizes[c] = rowSizes[rowSizes.Length / 2];
+            }
+            int sumSize = colSizes.Sum();
+            if (sumSize == 0) {
+                return;
+            }
+            for (int i = 0; i < Columns.Count; i++) {
+                Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                if (colSizes[i] > 0) {
+                    Columns[i].FillWeight = colSizes[i] / (float)sumSize;
+                } else {
+                    Columns[i].FillWeight = 0.1f;
+                }
+                Columns[i].MinimumWidth = (int)(80 * this.DeviceDpi / 96.0);
+            }
+            columnWidthInitialized = true;
         }
     }
 }
